@@ -31,6 +31,7 @@ import {
 import { auth } from '@/firebase/firebase.conf'
 import { useTransition } from 'react'
 import { Loader } from 'lucide-react'
+import { useNavigation } from '@/utils/use-navigation'
 
 type FormData = z.infer<typeof schema>
 
@@ -40,6 +41,8 @@ export function LoginPage() {
   const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth)
   const [signInWithGoogle] = useSignInWithGoogle(auth)
   const [signInWithGithub] = useSignInWithGithub(auth)
+
+  const nav = useNavigation({ route: '/' })
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -54,7 +57,29 @@ export function LoginPage() {
       try {
         await signInWithEmailAndPassword(data.email, data.password)
         form.reset()
+        nav()
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }
 
+  const handleGoogleLogin = () => {
+    startTransition(async () => {
+      try {
+        await signInWithGoogle()
+        nav()
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }
+
+  const handleGithubLogin = () => {
+    startTransition(async () => {
+      try {
+        await signInWithGithub()
+        nav()
       } catch (error) {
         console.error(error)
       }
@@ -128,7 +153,7 @@ export function LoginPage() {
             className='flex flex-col gap-2'
           >
             <Button
-              onClick={() => signInWithGoogle()}
+              onClick={handleGoogleLogin}
             >
               <img
                 src={googleIcon}
@@ -138,7 +163,7 @@ export function LoginPage() {
               <span>Login with Google</span>
             </Button>
             <Button
-              onClick={() => signInWithGithub()}
+              onClick={handleGithubLogin}
             >
               <img
                 src={githubIcon}
