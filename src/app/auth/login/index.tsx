@@ -30,6 +30,7 @@ import {
 } from 'react-firebase-hooks/auth'
 import { auth } from '@/firebase/firebase.conf'
 import { useTransition } from 'react'
+import { Loader } from 'lucide-react'
 
 type FormData = z.infer<typeof schema>
 
@@ -110,7 +111,7 @@ export function LoginPage() {
                 disabled={isPending}
                 className={`w-full capitalize font-bold text-sm ${isPending && 'cursor-not-allowed'}`}
               >
-                login
+                {isPending ? <Loader className='animate-spin'/> : 'Login'}
               </Button>
             </form>
           </Form>
