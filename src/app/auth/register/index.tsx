@@ -26,6 +26,8 @@ import { FirebaseError } from 'firebase/app'
 import { auth } from '@/firebase/firebase.conf'
 import { useToast } from '@/hooks/use-toast'
 import { useTransition } from 'react'
+import { useNavigation } from '@/utils/use-navigation'
+import { Loader } from 'lucide-react'
 
 type FormData = z.infer<typeof schema>
 
@@ -33,6 +35,7 @@ export function RegisterPage() {
   const [isPending, startTransition] = useTransition()
   const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth)
   const { toast } = useToast()
+  const nav = useNavigation({ route: '/auth/login' })
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -53,6 +56,7 @@ export function RegisterPage() {
           description: 'User created successfully',
           duration: 3000
         })
+        nav()
       } catch (error) {
         if (error instanceof FirebaseError) {
           console.log(error)
@@ -126,7 +130,7 @@ export function RegisterPage() {
                 disabled={isPending}
                 className={`w-full capitalize font-bold text-sm ${isPending && 'cursor-not-allowed'}`}
               >
-                login
+                {isPending ? <Loader className='animate-spin'/> : 'Register'}
               </Button>
             </form>
           </Form>
