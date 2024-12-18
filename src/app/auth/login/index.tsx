@@ -108,10 +108,10 @@ export function LoginPage() {
                   <FormItem>
                     <FormLabel>Username or Email</FormLabel>
                     <FormControl>
-                      <Input 
-                        {...field} 
-                        autoComplete='off' 
-                        placeholder="L7NlU@example.com" 
+                      <Input
+                        {...field}
+                        autoComplete='off'
+                        placeholder="L7NlU@example.com"
                       />
                     </FormControl>
                     <FormMessage>
@@ -140,7 +140,7 @@ export function LoginPage() {
                 disabled={isPending}
                 className={`w-full capitalize font-bold text-sm ${isPending && 'cursor-not-allowed'}`}
               >
-                {isPending ? <Loader className='animate-spin'/> : 'Login'}
+                {isPending ? <Loader className='animate-spin' /> : 'Login'}
               </Button>
             </form>
           </Form>
@@ -155,22 +155,38 @@ export function LoginPage() {
             <Button
               onClick={handleGoogleLogin}
             >
-              <img
-                src={googleIcon}
-                alt="icon google"
-                className='size-6'
-              />
-              <span>Login with Google</span>
+              {
+                isPending ? (
+                  <Loader className='animate-spin' />
+                ) : (
+                  <>
+                    <img
+                      src={googleIcon}
+                      alt="icon google"
+                      className='size-6'
+                    />
+                    <span>Login with Google</span>
+                  </>
+                )
+              }
             </Button>
             <Button
               onClick={handleGithubLogin}
             >
-              <img
-                src={githubIcon}
-                alt="icon github"
-                className='size-6'
-              />
-              <span>Login with Github</span>
+              {
+                isPending ? (
+                  <Loader className='animate-spin' />
+                ) : (
+                  <>
+                    <img
+                      src={githubIcon}
+                      alt="icon github"
+                      className='size-6'
+                    />
+                    <span>Login with Github</span>
+                  </>
+                )
+              }
             </Button>
           </div>
         </CardContent>
