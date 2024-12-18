@@ -1,6 +1,8 @@
 import { AuthLayout } from '@/app/auth/layout'
 import { LoginPage } from '@/app/auth/login'
 import { RegisterPage } from '@/app/auth/register'
+import { DashboardLayout } from '@/app/dash/layout'
+import { ProtectedRouters } from '@/components/protectedRouters'
 import { createBrowserRouter, RouteObject } from 'react-router'
 
 const routers: RouteObject[] = [
@@ -20,14 +22,16 @@ const routers: RouteObject[] = [
   },
   {
     path: '/',
-    element: <h1>Layout</h1>,
+    element: <ProtectedRouters children={
+      <DashboardLayout />
+    }/>,
     children: [
       {
         path: '/',
         element: <h1>Home</h1>
       },
       {
-        path: '/preview',
+        path: 'preview',
         element: <h1>Preview</h1>
       }
     ]
