@@ -83,7 +83,11 @@ export function LoginPage() {
                   <FormItem>
                     <FormLabel>Username or Email</FormLabel>
                     <FormControl>
-                      <Input {...field} autoComplete='off' placeholder="L7NlU@example.com" />
+                      <Input 
+                        {...field} 
+                        autoComplete='off' 
+                        placeholder="L7NlU@example.com" 
+                      />
                     </FormControl>
                     <FormMessage>
                       {form.formState.errors.email?.message}
