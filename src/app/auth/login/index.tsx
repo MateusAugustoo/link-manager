@@ -32,6 +32,8 @@ import { auth } from '@/firebase/firebase.conf'
 import { useTransition } from 'react'
 import { Loader } from 'lucide-react'
 import { useNavigation } from '@/utils/use-navigation'
+import { handleLoginUser } from '@/utils/handleLoginUser'
+import { useToast } from '@/hooks/use-toast'
 
 type FormData = z.infer<typeof schema>
 
@@ -43,7 +45,8 @@ export function LoginPage() {
   const [signInWithGithub] = useSignInWithGithub(auth)
 
   const nav = useNavigation({ route: '/' })
-
+  const { toast } = useToast()
+  
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -55,11 +58,19 @@ export function LoginPage() {
   const onSubmit: SubmitHandler<FormData> = (data) => {
     startTransition(async () => {
       try {
-        await signInWithEmailAndPassword(data.email, data.password)
-        form.reset()
-        nav()
+        const userCredential = await signInWithEmailAndPassword(data.email, data.password)
+        if (userCredential) {
+          await handleLoginUser(userCredential)
+          form.reset()
+          nav()
+        }
+        if (!userCredential) throw new Error('Invalid credentials')
       } catch (error) {
-        console.error(error)
+        toast({
+          title: 'Error',
+          description: (error as Error).message,
+          duration: 3000
+        })
       }
     })
   }
@@ -155,38 +166,27 @@ export function LoginPage() {
             <Button
               onClick={handleGoogleLogin}
             >
-              {
-                isPending ? (
-                  <Loader className='animate-spin' />
-                ) : (
-                  <>
-                    <img
-                      src={googleIcon}
-                      alt="icon google"
-                      className='size-6'
-                    />
-                    <span>Login with Google</span>
-                  </>
-                )
-              }
+              <>
+                <img
+                  src={googleIcon}
+                  alt="icon google"
+                  className='size-6'
+                />
+                <span>Login with Google</span>
+              </>
+
             </Button>
             <Button
               onClick={handleGithubLogin}
             >
-              {
-                isPending ? (
-                  <Loader className='animate-spin' />
-                ) : (
-                  <>
-                    <img
-                      src={githubIcon}
-                      alt="icon github"
-                      className='size-6'
-                    />
-                    <span>Login with Github</span>
-                  </>
-                )
-              }
+              <>
+                <img
+                  src={githubIcon}
+                  alt="icon github"
+                  className='size-6'
+                />
+                <span>Login with Github</span>
+              </>
             </Button>
           </div>
         </CardContent>
