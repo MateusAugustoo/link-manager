@@ -2,8 +2,9 @@ import { create } from 'zustand'
 
 type User = {
   uid: string
+  username: string | null
   email: string
-  displayName: string | null
+  name: string | null
   photoURL: string | null
 }
 
