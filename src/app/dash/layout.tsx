@@ -1,11 +1,17 @@
 import { Outlet } from "react-router";
 import { useUserStore } from '@/store/useUserStore'
 import { Button } from "@/components/ui/button";
+import { signOut } from 'firebase/auth'
+import { auth } from "@/firebase/firebase.conf";
 
 export function DashboardLayout() {
 
   const email = useUserStore((state) => state.user?.email)
-  const logout = useUserStore((state) => state.logout)
+  const logout = () => {
+    const store = useUserStore.getState()
+    signOut(auth)
+    store.clearUser()
+  }
 
   return (
     <main>
