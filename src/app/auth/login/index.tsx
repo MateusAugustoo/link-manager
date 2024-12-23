@@ -46,7 +46,7 @@ export function LoginPage() {
 
   const nav = useNavigation({ route: '/' })
   const { toast } = useToast()
-  
+
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -59,12 +59,10 @@ export function LoginPage() {
     startTransition(async () => {
       try {
         const userCredential = await signInWithEmailAndPassword(data.email, data.password)
-        if (userCredential) {
-          await handleLoginUser(userCredential)
-          form.reset()
-          nav()
-        }
         if (!userCredential) throw new Error('Invalid credentials')
+
+        await handleLoginUser(userCredential)
+        nav()
       } catch (error) {
         toast({
           title: 'Error',
